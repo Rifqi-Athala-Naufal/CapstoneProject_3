@@ -1,3 +1,4 @@
+
 # Capstone Project 3
 
  - **Rifqi Athala Naufal**
@@ -6,128 +7,118 @@
 
 # **Bank Marketing Campaign**
 
-Pada Project ini akan membahas Data Analysis yang bersumber dari Data Bank Marketing Campaign, [link] https://drive.google.com/drive/folders/1RbARQXmF64lrOV-RSBhLa5vKk0vBVMEf.
+## Business Problem Understanding
+**Context**
+Jenis produk keuangan yang digunakan masyarakat semakin bervariasi. Salah satu produk keuangan yang banyak dikenal masyarakat adalah deposito berjangka. Mekanisme deposito berjangka adalah nasabah menyetorkan sejumlah uangnya ke bank atau lembaga keuangan, dan uang tersebut baru dapat ditarik setelah jangka waktu tertentu. Sebagai imbalannya, nasabah akan diberikan bunga tetap sesuai dengan jumlah nominal uang yang disetorkan.
 
-Secara garis besar, Project ini berisikan :
-1. Business Problem Understanding
-2. Data Understanding
-3. Data Cleaning
-4. Data Preparation & Feature Engineering
-5. Modeling & Evaluation
-6. Prediction : Pickle
-7. Conclusion & Recomendation
+Meski demikian, sebagai badan usaha yang memiliki produk keuangan dan nasabah masing-masing, bank tetap harus bersaing agar tidak kehilangan nasabah. Salah satu cara untuk mendapatkan nasabah baru adalah dengan melakukan kampanye pemasaran.
 
-## 1. Business Problem Understanding
+Target :
 
-Context <br>
-Berikut ini adalah kumpulan data yang menggambarkan hasil kampanye pemasaran bank. Kampanye yang dilakukan sebagian besar didasarkan pada panggilan telepon langsung, menawarkan klien bank untuk menempatkan deposito berjangka. Jika setelah semua upaya penandaan klien telah setuju untuk menempatkan deposit - variabel target ditandai 'ya', jika tidak 'tidak'.
+No (0) : Apabila nasabah tidak tertarik deposit
 
-Target : <br>
-Tidak (0) : Tidak menempatkan deposit. <br>
-Ya (1) : Menempatkan deposit.
+Yes (1) : Apabila nasabah tertarik deposit
 
-**Problem Statement :**
+**Problem Statement**
+Proses Marketing campaign bank perlu memperkirakan waktu dan sumber daya untuk menargetkan nasabah. Apabila campaign dilakukan kepada semua nasabah, biaya dan usaha yang dikeluarkan akan sangat besar, sehingga perlu dilakukan pemilihan ke beberapa nasabah tertentu saja. Bank perlu meningkatkan efisiensi kampanye dengan mengetahui kandidat nasabah mana yang tertarik menempatkan depositnya ke bank.
 
-Proses kampanye pemasaran bank memakan waktu dan sumber daya jika bank menargetkan semua nasabah tanpa melakukan penyaringan terlebih dahulu. Bank ingin meningkatkan efisiensi kampanye dengan mengetahui kandidat mana yang akan menempatkan depositnya ke bank.
+**Goals**
+Berdasarkan problem statement tersebut, bank perlu memiliki kemampuan untuk memprediksi kemungkinan seorang kandidat tertarik menempatkan depositnya atau tidak, sehingga campaign dapat difokuskan kepada nasabah yang tertarik untuk menempatkan deposit ke bank.
 
-Jika kampanye yang dilakukan kepada semua calon/kandidat depositor, maka waktu dan biaya tersebut akan sia-sia jika calon depositor tersebut tidak mau menempatkan uangnya di bank.
+Lebih lanjut, perusahaan perlu mengetahui faktor apa saja yang dapat membuat seorang nasabah tersebut tertarik untuk menempatkan deposito, sehingga mereka dapat membuat rencana yang lebih baik dalam pendekatan penawaran produk deposito.
 
-**Goals :**
-
-Maka berdasarkan permasalahan tersebut, bank ingin memiliki kemampuan untuk memprediksi kemungkinan seorang kandidat akan/ingin menempatkan depositnya atau tidak, sehingga dapat memfokuskan kampanye pada kandidat yang bersedia menempatkan deposit ke bank.
-
-Dan juga, perusahaan ingin mengetahui apa/faktor/variabel apa yang membuat seorang kandidat mau menempatkan deposito atau tidak, sehingga mereka dapat membuat rencana yang lebih baik dalam mendekati kandidat potensial (kandidat yang ingin menempatkan depostionya).
-
-**Analytic Approach :**
-
-Jadi yang akan kita lakukan adalah menganalisis data untuk menemukan pola yang membedakan kandidat yang mau menempatkan deposito atau tidak.
-
-Kemudian kita akan membangun model klasifikasi yang akan membantu bank untuk dapat memprediksi probabilitas seorang kandidat akan/ingin menempatkan deposito atau tidak.
+**Analytic Approach**
+Penelitian ini akan melakukan analisa untuk menemukan pola yang membedakan kandidat yang tertarik menempatkan deposito atau tidak. Selanjutnya, model klasifikasi akan dibangun untuk membantu bank memprediksi peluang seorang nasabah tertarik menempatkan deposito atau tidak.
 
 **Metric Evaluation**
+Type 1 error : False Positive
 
-Type 1 error : False Positive  
-Konsekuensi: sia-sianya biaya kampanye, waktu dan sumber daya
+-   Konsekuensi: sia-sianya biaya marketing campaign, waktu dan sumber daya
 
-Type 2 error : False Negative  
-Konsekuensi: kehilangan calon depositor
+Type 2 error : False Negative
 
-Berdasarkan konsekuensinya, maka sebisa mungkin yang akan kita lakukan adalah membuat model yang dapat mengurangi cost kampanye dari bank tersebut, tetapi tanpa membuat menjadi kurangnya/tidak cukup kandidat depositor yang dibutuhkan bank. Jadi harus kita seimbangkan nanti antara precision dan recallnya dari kelas positive (kandidat depositor). Jadi nanti metric utama yang akan kita gunakan adalah roc_auc.
+-   Konsekuensi: kehilangan calon nasabah
 
-## 2. Data Understanding
+Berdasarkan konsekuensinya, maka sebisa mungkin yang akan kita lakukan adalah membuat model yang dapat mengurangi biaya marketing campaign dari bank tersebut, tetapi tanpa membuat menjadi kurangnya/tidak cukup kandidat nasabah yang dibutuhkan bank. Jadi kita ingin sebanyak mungkin prediksi kelas positif yang benar, dengan sesedikit mungkin prediksi false positive. metric utama yang akan kita gunakan adalah  `roc_auc`.
 
-Note : <br>
-- Sebagian besar fitur bersifat kategori (Nominal, Ordinal, Binary)
-- Setiap baris data merepresentasikan informasi seorang customer yang pernah dilakukan bank campaign di masa lalu
+## Data Understanding
 
 ### Attribute Information
-
-| Atribut/Feature | Tipe Data | Deskripsi |
+| Attribute | Data Type | Description |
 | --- | --- | --- |
-| age | numeric | Umur customer
-| job | categorical | Tipe-tipe job
-| balance | numeric | Rata-rata balance tahunan |
-| housing | binary | Memiliki cicilan rumah
-| loan | binary | Memiliki hutang personal
-| contact | categorical | Tipe kontak komunikasi
-| month | categorical | Kontak terakir dalam setahun
-| campaign | numeric | Jumlah kontak yang dilakukan selama kampanye
-| pdays | numeric | Jumlah hari berlalu setelah customer terakhir dihubungi dari kammpanye sebelumnya
-| poutcome | categorical | Hasil dari kampanye pemasaran sebelumnya
-| deposit | binary | customer berlangganan deposit berjangka
+| age | numeric | Age of customer
+| job | categorical | Type of job
+| balance | numeric | Customer's account balance |
+| housing | binary | Customer is having a housing loan
+| loan | binary | Customer is having a personal loan
+| contact | categorical | type of contact method
+| month | categorical | Last contact month
+| campaign | numeric | Number of contacts performed during the campaign
+| pdays | numeric | Number of days passed after the prospective customer was last contacted from the previous campaign
+| poutcome | categorical | Outcome of the previous campaign
+| deposit | binary | "yes" if customer interested to deposit; "no" if customer not interested to deposit.
 
-## 3. Data Cleaning
+## Data Cleaning
 
-Tidak ada data yang hilang/kosong, semua feature bisa digunakan dan siap pakai untuk melakukan analisa terhadap masalah dan juga pembuatan model machine learningnya.
+Tidak ada data yang hilang/kosong sehingga siap dipakai untuk melakukan analisa terhadap masalah dan pembuatan model.
 
-Data tipe yang ada susah sesuai dengan featurenya, jadi tidak perlu merubah tipe data, dan lanjut ke tahap Analisa Datanya untuk keperluan masalah yang dihadapi.
+Tipe data yang ada susah sesuai dengan fiturnya, jadi tidak perlu merubah tipe data, dan lanjut ke tahap Analisa Datanya untuk keperluan masalah yang dihadapi.
 
 ## Data Analysis
 
 Berdasarkan plot yang dibuat, dapat kita simpulkan bahwa :
 
-1. Pesebaran data customer yang deposit atau tidak seimbang, jadi tidak diperlukan handling imbalance
-2. Usia customer yang melakukan deposit atau tidak yakni sama, sekitar di rentang 40 tahunan
-3. Pada grafik Deposit vs Balance, terdapat outliers baik pada customer yang melakukan deposit atau tidak, namun disini tidak akan dihapus untuk outliersnya, dikarenakan terlalu banyak jumlahnya. 
+1. Pesebaran data nasabahyang tertarik deposit dan tidak tertarik seimbang, jadi tidak diperlukan handling imbalance
+2. Nasabah yang tidak memiliki  `housing`  loan cenderung memiliki potensi minat terhadap deposit yang lebih tinggi dibandingkan dengan yang memiliki  `housing`  loan.
+3. Nasabah yang tidak memiliki personal  `loan`  cenderung memiliki potensi minat terhadap deposit yang lebih tinggi dibandingkan dengan yang memiliki  `loan`.
+4. Usia nasabah yang tertarik deposit atau tidak tertarik memiliki rentang nilai yang sama, dengan nilai median sekitar 40 tahun.
+5. Pada grafik Deposit vs Balance terdapat  _outlier_  apakah nasabah tertarik melakukan deposit atau tidak. Dalam hal ini, data  _outlier_  tidak akan dihilangkan karena jumlah datanya besar.
 
-## 4. Data Preparation & Feature Engineering
+## Data Processing
 
-Sekarang mari kita melakukan fitur encoding untuk fitur-fitur categorical yang kita miliki.
-Yang akan kita lakukan adalah :
+Berdasarkan data yang kita punya, _One-hot encoding_  , teknik yang digunakan untuk mengubah variabel kategorik ke dalam format yang dapat disediakan bagi algoritma  _machine learning_  untuk melakukan pekerjaan prediksi dengan lebih baik, perlu diterapkan. Banyak algoritma  _machine learning_  tidak dapat bekerja dengan data kategorik secara langsung dan memerlukan numerical input.  _One-hot encoding_  adalah cara untuk mengubah data kategorik menjadi data numerik.
 
-1. Merubah fitur/kolom `job` menggunakan One Hot Encoding, karena fitur ini tidak memiliki urutan/tidak ordinal, dan juga jumlah unique datanya hanya sedikit.
+selanjutnya,  **_One-hot encoding_**  akan diaplikasikan ke kolom  `job`,  `housing`,  `loan`,  `contact`,  `month`,  `poutcome`  karena kolom ini tidak ordinal, dan juga memiliki jumlah data unik yang sedikit.
 
-2. Merubah fitur/kolom `housing` menggunakan One Hot Encoding, karena fitur ini tidak memiliki urutan/tidak ordinal, dan juga jumlah unique datanya hanya sedikit.
+## Modelling & Evaluation
+**_Random Forest_** muncul sebagai model dengan kinerja terbaik berdasarkan metrik `roc_auc`.
 
-3. Merubah fitur/kolom `loan` menggunakan One Hot Encoding, karena fitur ini tidak memiliki urutan/tidak ordinal, dan juga jumlah unique datanya hanya sedikit.
+## Pickle
 
-4. Merubah fitur/kolom `contact` menggunakan One Hot Encoding, karena fitur ini tidak memiliki urutan/tidak ordinal, dan juga jumlah unique datanya hanya sedikit.
+Dikarenakan model yang dibuat adalah Random Forest, maka pickle dilakukan compress karena ukuran file nya lebih dari 25Mb yang merupakan limitasi dari github.
 
-5. Merubah fitur/kolom `month` menggunakan One Hot Encoding, karena fitur ini tidak memiliki urutan/tidak ordinal, dan juga jumlah unique datanya hanya sedikit.
+## Conclusion
 
-6. Merubah fitur/kolom `poutcome` menggunakan One Hot Encoding, karena fitur ini tidak memiliki urutan/tidak ordinal, dan juga jumlah unique datanya hanya sedikit.
 
-## 5. Modelling & Evaluation
+Berdasarkan hasil classification report dari model kita, kita dapat menyimpulkan bahwa apabila nantinya model kita akan digunakan untuk memfilter list nasabah yang akan kita coba tawarkan, maka model kita dapat mengurangi 75% nasabah yang tidak tertarik untuk tidak kita approach, dan model kita dapat mendapatkan 65% nasabah yang tertarik dari seluruh nasabah yang tertarik melakukan deposit. (berdasarkan recall)
 
-Terlihat bahwa model Random Forest adalah yang terbaik untuk roc_aucnya dari setiap model yang menggunakan default hyperparameter.
+Model kita ini memiliki ketepatan prediksi nasabah yang tertarik melakukan deposito sebesar 71% (precisionnya), jadi setiap model kita dapat memprediksi bahwa seorang nasabah itu tertarik, maka kemungkinan tebakannya benar itu sebesar 71% kurang lebih. Maka masih akan ada nasabah yang sebenarnya tidak tertarik namun diprediksi sebagai nasabah yang tertarik sekitar 25% dari keseluruhan nasabah yang tidak tertarik (berdasarkan recall).
 
-## 6. Prediction : Pickle
+Bila seandainya biaya untuk screening/menyaring data per nasabah itu $18.34 (sumber: [https://thefinancialbrand.com/news/bank-marketing/bank-marketing-budgets-advertising-roi-strategy-88835/](https://www.google.com/url?q=https%3A%2F%2Fthefinancialbrand.com%2Fnews%2Fbank-marketing%2Fbank-marketing-budgets-advertising-roi-strategy-88835%2F)), dan andaikan jumlah nasabah yang kita miliki untuk suatu kurun waktu sebanyak 200 orang (dimana andaikan 100 orang tertarik, dan 100 orang lagi tidak tertarik), maka hitungannya kurang lebih akan seperti ini :
 
-Dikarenakan model yang dibuat adalah Random Forest, maka pickle dilakukan compress menggunakan zipx untuk mengkompresi pickle yang ukruran file nya lebih dari 25Mb (yang mana limitasi dari github).
+Tanpa Model (semua nasabah kita cek dan tawarkan) :
 
-## 7. Conclusion & Recommendation
+-   Total Biaya => 200 x 18.34 USD = 3668 USD
+-   Total nasabah Tertarik yang didapatkan => 100 orang (karena semua kita tawarkan)
+-   Total nasabah Tertarik yang tidak didapatkan => 0 orang (karena semua kita tawarkan)
+-   Biaya yang terbuang => 100 x 18.34 USD = 1834 USD (karena 100 orang menolak dan menjadi sia-sia)
+-   Jumlah penghematan => 0 USD
 
-Berdasarkan hasil classification report dari model kita, kita dapat menyimpulkan/mengambil konklusi bahwa bila seandainya nanti kita menggunakan model kita untuk memfilter/menyaring list customer yang akan kita coba tawarkan, maka model kita dapat mengurangi 74% customer yang tidak tertarik untuk tidak kita approach, dan model kita dapat mendapatkan 65% customer yang tertarik dari seluruh customer yang tertarik melakukan deposit. (semua ini berdasarkan recallnya)
+Dengan Model (hanya nasabah yang diprediksi oleh model tertarik yang kita check dan tawarkan) :
 
-Model kita ini memiliki ketepatan prediksi customer yang tertarik melakukan deposito sebesar 70% (precisionnya), jadi setiap model kita memprediksi bahwa seorang customer itu tertarik, maka kemungkinan tebakannya benar itu sebesar 70% kurang lebih. Maka masih akan ada customer yang sebenarnya tidak tertarik tetapi diprediksi sebagai customer yang tertarik sekitar 26% dari keseluruhan kandidat yang tidak tertarik (berdasarkan recall).
+-   Total Biaya => (65 x 18.34 USD) + (25 x 18.34 USD) = 1650.6 USD
+-   Total nasabah Tertarik yang didapatkan => 65 orang (karena recall yes/yg tertarik itu 65%)
+-   Total nasabah Tertarik yang tidak didapatkan => 35 orang (karena recall yes/yg tertarik itu 65%)
+-   Biaya yang terbuang => 25 x 18.34 USD = 458.5 USD (berdasarkan recall no/yg tidak tertarik (25 orang menolak tawaran/tidak tertarik))
+-   Jumlah penghematan => 75 x 18.34 USD = 1375.5 USD (yang dihitung hanya yang memang tidak tertarik saja, kalau yang tertarik tapi tidak ditawarkan itu tidak dihitung disini)
 
-Berdasarkan analisa tersebut, terlihat bahwa dengan menggunakan model kita, maka bank bisa menghemat biaya yang cukup besar tanpa mengorbankan terlalu banyak jumlah customer potensial yg tertarik.
+Berdasarkan contoh hitungan tersebut, terlihat bahwa dengan menggunakan model kita, maka Bank tersebut akan menghemat biaya yang cukup besar tanpa mengorbankan terlalu banyak jumlah nasabah potensial/nasabah yg tertarik.
 
-#### Recommendation
+## Recommendation
 
-Hal-hal yang bisa dilakukan untuk mengembangkan project dan modelnya lebih baik lagi :
 
-- Memperbaiki modelling dari sebelumnya atau melakukan improvement dari model yang sudah dibuat.
-- Menambahkan fitur2 atau kolom2 baru yang kemungkinan bisa berhubungan dengan ketertarikannya, seperti status perkawinan, tingkat edukasi, dan lainnya.
-- Mencoba algorithm ML yang lain dan juga mencoba hyperparameter tuning kembali.
-- Menganalisa data-data yang model kita masih salah tebak untuk mengetahui alasannya dan karakteristiknya bagaimana.
+Hal-hal yang bisa dilakukan untuk mengembangkan project dan modelnya lebih baik lagi:
+
+-   Menambahkan fitur - fitur atau kolom - kolom baru yang kemungkinan bisa berhubungan dengan ketertarikannya, seperti gaji atau pendapatan, jabatan pekerjaannya sekarang (apakah karyawan, manager, direktur, dan sebagainya), status pernikahan, dll.
+-   Mencoba menggunakan model machine learning yang lain dan juga mencoba hyperparameter tuning kembali.   
+-   Berdasarkan dataset, masih terdapat fitur  `contact`, yang menandakan bahwa metode marketing masih menggunakan metode traditional marketing, seperti menawarkan deposit dengan cara menelpon nasabah. oleh karena itu akan lebih baik dan lebih efektif apabila menambahkan metode Digital Marketing Campaign.
