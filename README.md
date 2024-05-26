@@ -1,4 +1,10 @@
-# Purwadhika-Project-Module-3---Bank-Campaign
+# Capstone Project 3
+
+ - **Rifqi Athala Naufal**
+ - **JCDSOL - 013**
+
+
+# **Bank Marketing Campaign**
 
 Pada Project ini akan membahas Data Analysis yang bersumber dari Data Bank Marketing Campaign, [link] https://drive.google.com/drive/folders/1RbARQXmF64lrOV-RSBhLa5vKk0vBVMEf.
 
