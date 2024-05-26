@@ -9,6 +9,7 @@
 
 ## Business Problem Understanding
 **Context**
+
 Jenis produk keuangan yang digunakan masyarakat semakin bervariasi. Salah satu produk keuangan yang banyak dikenal masyarakat adalah deposito berjangka. Mekanisme deposito berjangka adalah nasabah menyetorkan sejumlah uangnya ke bank atau lembaga keuangan, dan uang tersebut baru dapat ditarik setelah jangka waktu tertentu. Sebagai imbalannya, nasabah akan diberikan bunga tetap sesuai dengan jumlah nominal uang yang disetorkan.
 
 Meski demikian, sebagai badan usaha yang memiliki produk keuangan dan nasabah masing-masing, bank tetap harus bersaing agar tidak kehilangan nasabah. Salah satu cara untuk mendapatkan nasabah baru adalah dengan melakukan kampanye pemasaran.
@@ -20,17 +21,21 @@ No (0) : Apabila nasabah tidak tertarik deposit
 Yes (1) : Apabila nasabah tertarik deposit
 
 **Problem Statement**
+
 Proses Marketing campaign bank perlu memperkirakan waktu dan sumber daya untuk menargetkan nasabah. Apabila campaign dilakukan kepada semua nasabah, biaya dan usaha yang dikeluarkan akan sangat besar, sehingga perlu dilakukan pemilihan ke beberapa nasabah tertentu saja. Bank perlu meningkatkan efisiensi kampanye dengan mengetahui kandidat nasabah mana yang tertarik menempatkan depositnya ke bank.
 
 **Goals**
+
 Berdasarkan problem statement tersebut, bank perlu memiliki kemampuan untuk memprediksi kemungkinan seorang kandidat tertarik menempatkan depositnya atau tidak, sehingga campaign dapat difokuskan kepada nasabah yang tertarik untuk menempatkan deposit ke bank.
 
 Lebih lanjut, perusahaan perlu mengetahui faktor apa saja yang dapat membuat seorang nasabah tersebut tertarik untuk menempatkan deposito, sehingga mereka dapat membuat rencana yang lebih baik dalam pendekatan penawaran produk deposito.
 
 **Analytic Approach**
+
 Penelitian ini akan melakukan analisa untuk menemukan pola yang membedakan kandidat yang tertarik menempatkan deposito atau tidak. Selanjutnya, model klasifikasi akan dibangun untuk membantu bank memprediksi peluang seorang nasabah tertarik menempatkan deposito atau tidak.
 
 **Metric Evaluation**
+
 Type 1 error : False Positive
 
 -   Konsekuensi: sia-sianya biaya marketing campaign, waktu dan sumber daya
